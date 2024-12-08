@@ -19,7 +19,6 @@ import styles from './BaseChat.module.scss';
 import type { ProviderInfo } from '~/utils/types';
 import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportChatButton';
 import { ImportButtons } from '~/components/chat/chatExportAndImport/ImportButtons';
-import { ExamplePrompts } from '~/components/chat/ExamplePrompts';
 import GitCloneButton from './GitCloneButton';
 
 import FilePreview from './FilePreview';
@@ -416,7 +415,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                       minHeight: TEXTAREA_MIN_HEIGHT,
                       maxHeight: TEXTAREA_MAX_HEIGHT,
                     }}
-                    placeholder="How can Bolt help you today?"
+                    placeholder="How can BossNova AI help you today?"
                     translate="no"
                   />
                   <ClientOnly>
@@ -507,15 +506,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                 <GitCloneButton importChat={importChat} />
               </div>
             )}
-            {!chatStarted &&
-              ExamplePrompts((event, messageInput) => {
-                if (isStreaming) {
-                  handleStop?.();
-                  return;
-                }
-
-                handleSendMessage?.(event, messageInput);
-              })}
           </div>
           <ClientOnly>{() => <Workbench chatStarted={chatStarted} isStreaming={isStreaming} />}</ClientOnly>
         </div>
