@@ -15,34 +15,44 @@ export function VersionChecker() {
     const checkVersion = async () => {
       try {
         console.log('Checking version...');
+
         // Get the latest commit from GitHub API
         const response = await fetch('https://api.github.com/repos/coleam00/bolt.new-any-llm/commits/main');
+
         if (!response.ok) {
           throw new Error('Failed to fetch latest commit');
         }
-        const data = await response.json();
-        
-        // If the latest commit is from GitHub Actions updating commit.json,
-        // use the parent commit instead as that's the actual code change
-        const latestCommit = data.commit.author.name === 'github-actions[bot]' && 
-                           data.parents.length > 0 ? 
-                           data.parents[0].sha : data.sha;
-        
+
+        const data = (await response.json()) as {
+          commit: { author: { name: string } };
+          parents: { sha: string }[];
+          sha: string;
+        };
+
+        /*
+         * If the latest commit is from GitHub Actions updating commit.json,
+         * use the parent commit instead as that's the actual code change
+         */
+        const latestCommit =
+          data.commit.author.name === 'github-actions[bot]' && data.parents.length > 0 ? data.parents[0].sha : data.sha;
+
         console.log('Latest commit:', latestCommit);
 
         // Get the current commit from our commit.json
         const currentCommitResponse = await fetch('/commit.json');
+
         if (!currentCommitResponse.ok) {
           throw new Error('Failed to fetch current commit');
         }
-        const currentCommitData = await currentCommitResponse.json();
+
+        const currentCommitData = (await currentCommitResponse.json()) as { commit: string };
         const currentCommit = currentCommitData.commit;
         console.log('Current commit:', currentCommit);
 
         setVersionInfo({
           latest_commit: latestCommit,
           current_commit: currentCommit,
-          needs_update: latestCommit !== currentCommit
+          needs_update: latestCommit !== currentCommit,
         });
         setError(null);
       } catch (error) {
@@ -55,6 +65,7 @@ export function VersionChecker() {
 
     // Check version every hour
     checkVersion();
+
     const interval = setInterval(checkVersion, 60 * 60 * 1000);
 
     return () => clearInterval(interval);
@@ -76,12 +87,14 @@ export function VersionChecker() {
     );
   }
 
-  if (!versionInfo) return null;
+  if (!versionInfo) {
+    return null;
+  }
 
   return (
-    <div 
+    <div
       className={`px-2 py-1 text-sm ${
-        versionInfo.needs_update 
+        versionInfo.needs_update
           ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
           : 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200'
       }`}
@@ -102,9 +115,7 @@ export function VersionChecker() {
       ) : (
         <span>✓ You're running the latest version!</span>
       )}
-      <span className="ml-2 opacity-60">
-        (Current: {versionInfo.current_commit.slice(0, 7)})
-      </span>
+      <span className="ml-2 opacity-60">(Current: {versionInfo.current_commit.slice(0, 7)})</span>
     </div>
   );
 }

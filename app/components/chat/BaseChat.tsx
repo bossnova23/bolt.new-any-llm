@@ -264,13 +264,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
         )}
         data-chat-visible={showChat}
       >
-        <div className={classNames(styles.RayContainer)}>
-          <div className={classNames(styles.LightRayOne)}></div>
-          <div className={classNames(styles.LightRayTwo)}></div>
-          <div className={classNames(styles.LightRayThree)}></div>
-          <div className={classNames(styles.LightRayFour)}></div>
-          <div className={classNames(styles.LightRayFive)}></div>
-        </div>
         <ClientOnly>{() => <Menu />}</ClientOnly>
         <div ref={scrollRef} className="flex flex-col lg:flex-row overflow-y-auto w-full h-full">
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full')}>

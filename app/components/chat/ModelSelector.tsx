@@ -10,16 +10,11 @@ interface ModelSelectorProps {
   providerList: ProviderInfo[];
 }
 
-export const ModelSelector = ({
-  setModel,
-  setProvider,
-  modelList,
-  providerList,
-}: ModelSelectorProps) => {
+export const ModelSelector = ({ setModel, setProvider, modelList, providerList }: ModelSelectorProps) => {
   // Set Claude 3.5 Sonnet as the default model
-  const claudeProvider = providerList.find(p => p.name === 'anthropic');
-  const claudeModel = modelList.find(m => m.name === 'claude-3-sonnet-20240229');
-  
+  const claudeProvider = providerList.find((p) => p.name === 'anthropic');
+  const claudeModel = modelList.find((m) => m.name === 'claude-3-sonnet-20240229');
+
   if (claudeProvider && claudeModel) {
     setProvider?.(claudeProvider);
     setModel?.(claudeModel.name);
