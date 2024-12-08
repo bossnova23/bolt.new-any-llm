@@ -1,7 +1,9 @@
 {
-  "name": "bolt",
-  "description": "An AI Agent",
+  "name": "bossnova-ai",
+  "version": "1.0.0",
+  "description": "BossNova AI - Your Intelligent Development Partner powered by Claude 3.5 Sonnet",
   "private": true,
+  "author": "BossNova AI Team",
   "license": "MIT",
   "sideEffects": false,
   "type": "module",

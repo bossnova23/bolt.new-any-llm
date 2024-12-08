@@ -37,3 +37,6 @@ modelfiles
 
 # docs ignore
 site
+
+# Local Netlify folder
+.netlify

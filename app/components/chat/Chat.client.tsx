@@ -191,6 +191,8 @@ export const ChatImpl = memo(
         return;
       }
 
+      await runAnimation();
+
       /**
        * @note (delm) Usually saving files shouldn't take long but it may take longer if there
        * many unsaved files. In that case we need to block user input and show an indicator
@@ -201,10 +203,7 @@ export const ChatImpl = memo(
       await workbenchStore.saveAllFiles();
 
       const fileModifications = workbenchStore.getFileModifcations();
-
       chatStore.setKey('aborted', false);
-
-      runAnimation();
 
       if (fileModifications !== undefined) {
         /**

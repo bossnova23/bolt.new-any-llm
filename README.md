@@ -74,6 +74,67 @@ Whether you’re an experienced developer, a PM, or a designer, Bolt.new allows 
 
 For developers interested in building their own AI-powered development tools with WebContainers, check out the open-source Bolt codebase in this repo!
 
+## BossNova AI
+
+Your Intelligent Development Partner powered by Claude 3.5 Sonnet
+
+## About
+
+BossNova AI is a powerful development assistant that helps you build, debug, and enhance your software projects. Powered by Anthropic's Claude 3.5 Sonnet model, it provides intelligent code assistance, project scaffolding, and debugging help.
+
+## Features
+
+- **Intelligent Code Assistance**: Get help with coding tasks, debugging, and code optimization
+- **Project Creation**: Start new projects with best practices and modern tooling
+- **Code Understanding**: Get help understanding existing codebases and complex functions
+- **Modern UI**: Clean, intuitive interface focused on productivity
+- **Powered by Claude 3.5**: Leverage one of the most advanced AI models for development
+
+## Getting Started
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/bossnova-ai.git
+cd bossnova-ai
+```
+
+2. Install dependencies:
+```bash
+pnpm install
+```
+
+3. Set up your environment:
+- Copy `.env.example` to `.env.local`
+- Add your Anthropic API key
+
+4. Start the development server:
+```bash
+pnpm dev
+```
+
+## Technology Stack
+
+- **Frontend**: React, Remix, TypeScript
+- **Styling**: TailwindCSS, SCSS
+- **AI**: Claude 3.5 Sonnet by Anthropic
+- **Build Tools**: Vite, PNPM
+
+## Contributing
+
+We welcome contributions! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For support, please open an issue on GitHub or contact our team at [your-support-email].
+
+---
+
+Built with ❤️ by the BossNova AI team
+
 ## Setup
 
 Many of you are new users to installing software from Github. If you have any installation troubles reach out and submit an "issue" using the links above, or feel free to enhance this documentation by forking, editing the instructions, and doing a pull request.

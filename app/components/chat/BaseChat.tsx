@@ -14,18 +14,17 @@ import { Messages } from './Messages.client';
 import { SendButton } from './SendButton.client';
 import Cookies from 'js-cookie';
 import * as Tooltip from '@radix-ui/react-tooltip';
-
-import styles from './BaseChat.module.scss';
+import { chatStore } from '~/lib/stores/chat';
 import type { ProviderInfo } from '~/utils/types';
 import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportChatButton';
 import { ImportButtons } from '~/components/chat/chatExportAndImport/ImportButtons';
 import GitCloneButton from './GitCloneButton';
-
 import FilePreview from './FilePreview';
 import { ModelSelector } from '~/components/chat/ModelSelector';
 import { SpeechRecognitionButton } from '~/components/chat/SpeechRecognition';
+import { ExamplePrompts } from '~/components/chat/ExamplePrompts';
 
-const TEXTAREA_MIN_HEIGHT = 76;
+import styles from './BaseChat.module.scss';
 
 interface BaseChatProps {
   textareaRef?: React.RefObject<HTMLTextAreaElement> | undefined;
@@ -86,11 +85,11 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     ref,
   ) => {
     const TEXTAREA_MAX_HEIGHT = chatStarted ? 400 : 200;
+    const TEXTAREA_MIN_HEIGHT = 76;
     const [modelList, setModelList] = useState(MODEL_LIST);
     const [isModelSettingsCollapsed, setIsModelSettingsCollapsed] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
-    const [transcript, setTranscript] = useState('');
 
     // Load enabled providers from cookies
     const [enabledProviders, setEnabledProviders] = useState(() => {
@@ -131,7 +130,12 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       return () => clearInterval(interval);
     }, [PROVIDER_LIST]);
 
-    console.log(transcript);
+    useEffect(() => {
+      if (chatStarted) {
+        chatStore.setKey('started', true);
+      }
+    }, [chatStarted]);
+
     useEffect(() => {
       initializeModelList().then((modelList) => {
         setModelList(modelList);
@@ -144,18 +148,15 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
         recognition.interimResults = true;
 
         recognition.onresult = (event) => {
-          const transcript = Array.from(event.results)
-            .map((result) => result[0])
-            .map((result) => result.transcript)
-            .join('');
+          const { results } = event;
+          const result = results[0];
 
-          setTranscript(transcript);
+          if (result.isFinal) {
+            const text = result.item(0).transcript;
 
-          if (handleInputChange) {
-            const syntheticEvent = {
-              target: { value: transcript },
-            } as React.ChangeEvent<HTMLTextAreaElement>;
-            handleInputChange(syntheticEvent);
+            if (textareaRef?.current) {
+              textareaRef.current.value = text;
+            }
           }
         };
 
@@ -188,7 +189,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
 
         if (recognition) {
           recognition.abort(); // Stop current recognition
-          setTranscript(''); // Clear transcript
           setIsListening(false);
 
           // Clear the input by triggering handleInputChange with empty value
@@ -267,14 +267,17 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
         <div ref={scrollRef} className="flex flex-col lg:flex-row overflow-y-auto w-full h-full">
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full')}>
             {!chatStarted && (
-              <div id="intro" className="mt-[26vh] max-w-chat mx-auto text-center px-4 lg:px-0">
-                <h1 className="text-3xl lg:text-6xl font-bold text-bolt-elements-textPrimary mb-4 animate-fade-in">
-                  Let's Build Something Great!
-                </h1>
-                <p className="text-md lg:text-xl mb-8 text-bolt-elements-textSecondary animate-fade-in animation-delay-200">
-                  Bring ideas to life in seconds or get help on existing projects.
-                </p>
-              </div>
+              <>
+                <div id="intro" className="mt-[26vh] max-w-chat mx-auto text-center px-4 lg:px-0">
+                  <h1 className="text-3xl lg:text-6xl font-bold text-bolt-elements-textPrimary mb-4 animate-fade-in">
+                    Let's Build Something Great!
+                  </h1>
+                  <p className="text-md lg:text-xl mb-8 text-bolt-elements-textSecondary animate-fade-in animation-delay-200">
+                    Bring ideas to life in seconds or get help on existing projects.
+                  </p>
+                </div>
+                <ClientOnly>{() => <ExamplePrompts />}</ClientOnly>
+              </>
             )}
             <div
               className={classNames('pt-6 px-2 sm:px-6', {

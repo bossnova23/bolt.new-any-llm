@@ -22,7 +22,7 @@ export function Header() {
         )}
       >
         <div className="flex items-center gap-2 z-logo text-bolt-elements-textPrimary cursor-pointer">
-          <div className="i-boss-nova-logo text-xl" />
+          <div className="i-ph:sidebar-simple-duotone text-xl" />
           <a href="/" className="text-2xl font-semibold text-accent flex items-center">
             BossNova AI
           </a>
