@@ -232,7 +232,8 @@ export default defineConfig({
   presets: [
     presetUno({
       dark: {
-        media: '(prefers-color-scheme: dark)',
+        light: '[data-theme="light"]',
+        dark: '[data-theme="dark"]',
       },
     }),
     presetIcons({
